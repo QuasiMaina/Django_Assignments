@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Calorie Counter</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.0/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 p-6">
+    <div class="max-w-2xl mx-auto bg-white rounded-lg p-6 shadow-md">
+        <h1 class="text-3xl font-bold mb-4 text-center">🍎 Calorie Counter</h1>
+
+        <form method="POST" class="flex gap-4 mb-6">
+            {% csrf_token %}
+            <input type="text" name="name" placeholder="Food name" class="border p-2 w-full rounded">
+            <input type="number" name="calories" placeholder="Calories" class="border p-2 w-full rounded">
+            <button class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Add</button>
+        </form>
+
+        <ul class="divide-y divide-gray-200 mb-4">
+            {% for item in food_items %}
+                <li class="py-2 flex justify-between">
+                    {{ item.name }} — <strong>{{ item.calories }} kcal</strong>
+                    <a href="{% url 'delete_food' item.id %}" class="text-red-500 hover:underline">Delete</a>
+                </li>
+            {% empty %}
+                <li class="text-gray-500">No food items yet.</li>
+            {% endfor %}
+        </ul>
+
+        <p class="text-lg font-semibold mb-2">Total Calories Today: {{ total_calories }} kcal</p>
+
+        <a href="{% url 'reset_day' %}" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Reset Day</a>
+    </div>
+</body>
+</html>
